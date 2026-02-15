@@ -2,988 +2,1180 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TYAZA � Therapy AI</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>TYAZA • fluid presence • adaptive voice</title>
+    <!-- Inter font for clean, readable typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <style>
-        * { scroll-behavior: smooth; }
-        :root { 
-            --primary: #8b5cf6; 
-            --primary-dark: #7c3aed; 
-            --secondary: #ec4899;
-            --bg-dark: #0a0a0c;
-            --bg-card: #151518;
-        }
-        
-        body { 
-            font-family: 'Outfit', system-ui, sans-serif; 
-            background: var(--bg-dark); 
-            color: #ececee; 
-            overflow: hidden; 
-        }
-        
-        /* Glass sidebar */
-        .glass-sidebar { 
-            background: rgba(14, 14, 18, 0.95); 
-            backdrop-filter: blur(28px); 
-            border-right: 1px solid rgba(255,255,255,0.06); 
-        }
-        
-        /* Chat bubbles */
-        .chat-bubble-user { 
-            background: linear-gradient(145deg, #1f1f24, #1a1a1f); 
-            border: 1px solid rgba(255,255,255,0.06); 
-            border-radius: 26px 26px 4px 26px; 
-            padding: 16px 24px; 
-            max-width: 80%; 
-            color: #f0f0f2; 
-            line-height: 1.6;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            font-size: 16px;
-        }
-        
-        .chat-bubble-ai { 
-            background: linear-gradient(145deg, #151518, #131316); 
-            border-radius: 26px 26px 26px 4px; 
-            padding: 20px 28px; 
-            border: 1px solid rgba(255,255,255,0.03); 
-            width: 100%; 
-            color: #e2e2e8; 
-            line-height: 1.8; 
-            font-size: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        
-        /* AI Avatar with TYAZA logo and therapy theme */
-        .ai-avatar { 
-            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
-            border-radius: 16px; 
-            width: 44px; 
-            height: 44px; 
-            box-shadow: 0 8px 20px rgba(139,92,246,0.3);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 20px;
-            color: white;
-            transition: all 0.3s;
-        }
-        
-        .ai-avatar::after {
-            content: 'T';
-            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            animation: heartbeat 2s infinite;
-        }
-        
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        
-        .ai-avatar.thinking {
-            animation: pulse-glow 1.5s infinite;
-        }
-        
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 8px 20px rgba(139,92,246,0.3); }
-            50% { box-shadow: 0 8px 30px rgba(236,72,153,0.8); }
-        }
-        
-        /* Professional scrollbar */
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-        .custom-scroll::-webkit-scrollbar-thumb { 
-            background: rgba(139,92,246,0.3); 
-            border-radius: 20px;
-            transition: all 0.2s;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(139,92,246,0.5); }
-        
-        /* History items */
-        .history-item { 
-            transition: all 0.2s; 
-            border-left: 3px solid transparent;
-            position: relative;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 4px;
-        }
-        
-        .history-item:hover { 
-            background: rgba(139,92,246,0.1); 
-            border-left-color: var(--primary); 
-        }
-        
-        .history-item.active {
-            background: rgba(139,92,246,0.15);
-            border-left-color: var(--secondary);
-        }
-        
-        /* Typing animation */
-        .typing-animation {
-            display: inline-flex;
-            gap: 6px;
-            align-items: center;
-            padding: 12px 16px;
-        }
-        
-        .typing-animation span {
-            width: 10px;
-            height: 10px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: inline-block;
-            animation: typingBounce 1.4s infinite ease-in-out;
-        }
-        
-        .typing-animation span:nth-child(1) { animation-delay: 0s; }
-        .typing-animation span:nth-child(2) { animation-delay: 0.2s; background: var(--secondary); }
-        .typing-animation span:nth-child(3) { animation-delay: 0.4s; }
-        
-        @keyframes typingBounce {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-12px); }
-        }
-        
-        /* Message enter animation */
-        .message-enter {
-            animation: fadeInUp 0.4s ease-out forwards;
-            opacity: 0;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Typing cursor effect for AI response */
-        .typing-cursor {
-            display: inline-block;
-            width: 2px;
-            height: 1.2em;
-            background: var(--primary);
-            margin-left: 4px;
-            animation: blink 1s infinite;
-            vertical-align: middle;
-        }
-        
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-        
-        /* Scroll to bottom button */
-        .scroll-bottom-btn {
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            background: var(--bg-card);
-            border: 1px solid var(--primary);
-            border-radius: 30px;
-            padding: 10px 18px;
-            color: var(--primary);
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 40;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        
-        .scroll-bottom-btn.visible {
-            opacity: 1;
-            pointer-events: all;
-        }
-        
-        .scroll-bottom-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-2px);
-        }
-        
-        /* Voice button with animations */
-        .voice-btn { 
-            transition: all 0.3s;
-            position: relative;
-        }
-        
-        .voice-btn:hover { transform: scale(1.05); }
-        
-        .voice-btn.listening { 
-            background: #ef4444 !important; 
-            animation: pulse-listening 1.5s infinite; 
-            color: white !important;
-        }
-        
-        @keyframes pulse-listening {
-            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
-            50% { opacity: 0.7; box-shadow: 0 0 0 10px rgba(239,68,68,0); }
-        }
-        
-        /* Wave animation for voice */
-        .wave-animation {
-            display: flex;
-            gap: 3px;
-            align-items: center;
-            height: 24px;
-        }
-        
-        .wave-animation span {
-            width: 4px;
-            height: 20px;
-            background: var(--primary);
-            border-radius: 4px;
-            animation: wave 1s infinite ease-in-out;
-        }
-        
-        .wave-animation span:nth-child(2) { animation-delay: 0.2s; height: 30px; background: var(--secondary); }
-        .wave-animation span:nth-child(3) { animation-delay: 0.4s; height: 16px; }
-        .wave-animation span:nth-child(4) { animation-delay: 0.3s; height: 24px; }
-        .wave-animation span:nth-child(5) { animation-delay: 0.1s; height: 28px; }
-        
-        @keyframes wave {
-            0%, 100% { transform: scaleY(0.5); }
-            50% { transform: scaleY(1.2); }
-        }
-        
-        /* Full screen AI response container */
-        .ai-response-full {
-            width: 100%;
-            max-width: 100%;
+        /* ========== ADVANCED RESPONSIVE DESIGN SYSTEM ========== */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
-        
-        /* Settings panel */
-        .settings-panel { 
-            background: rgba(21,21,24,0.8);
-            border: 1px solid rgba(139,92,246,0.2); 
-            border-radius: 20px; 
-            padding: 16px; 
-            margin-bottom: 16px;
-            backdrop-filter: blur(10px);
+
+        :root {
+            /* core colors – soft neon depth */
+            --primary: #a78bfa;
+            --primary-deep: #8b5cf6;
+            --secondary: #f9a8d4;
+            --secondary-deep: #ec4899;
+            --tertiary: #6ee7b7;
+            --bg-deepest: #030014;
+            --bg-deep: #0b0720;
+            --bg-surface: #151032;
+            --bg-elevated: #221b3d;
+            --text-primary: #f3eaff;
+            --text-secondary: #c4b5e6;
+            --text-tertiary: #9480b3;
+            --glass-edge: rgba(167, 139, 250, 0.2);
+            --glass-edge-strong: rgba(249, 168, 212, 0.25);
+            
+            /* responsive breakpoints */
+            --mobile: 480px;
+            --tablet: 768px;
+            --laptop: 1024px;
+            --desktop: 1280px;
+            
+            /* fluid typography – scales gracefully */
+            --font-size-xs: clamp(0.6rem, 1.5vw, 0.7rem);
+            --font-size-sm: clamp(0.7rem, 2vw, 0.8rem);
+            --font-size-base: clamp(0.9rem, 2.5vw, 1rem);
+            --font-size-lg: clamp(1.1rem, 3vw, 1.2rem);
+            --font-size-xl: clamp(1.5rem, 5vw, 2rem);
+            --font-size-xxl: clamp(2rem, 8vw, 3rem);
+            --font-size-hero: clamp(2.5rem, 12vw, 5rem);
+            
+            /* spacing – relative, uses clamp */
+            --space-xs: clamp(0.25rem, 1vw, 0.5rem);
+            --space-sm: clamp(0.5rem, 2vw, 0.75rem);
+            --space-md: clamp(0.75rem, 3vw, 1rem);
+            --space-lg: clamp(1rem, 4vw, 1.5rem);
+            --space-xl: clamp(1.5rem, 6vw, 2rem);
+            --space-xxl: clamp(2rem, 8vw, 3rem);
+            
+            /* touch targets – accessible */
+            --touch-target-min: 44px;
         }
-        
-        /* Voice visualization */
-        .voice-visualization {
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at 30% 20%, #2d1b44, var(--bg-deepest) 80%);
+            color: var(--text-primary);
+            height: 100dvh;
+            height: 100vh; /* fallback */
+            overflow: hidden;
+            position: relative;
+            line-height: 1.5;
+            font-weight: 350;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            touch-action: manipulation;
+        }
+
+        /* floating background layers */
+        .cosmic-web {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(167, 139, 250, 0.08) 0%, transparent 30%),
+                radial-gradient(circle at 80% 70%, rgba(249, 168, 212, 0.08) 0%, transparent 35%),
+                repeating-linear-gradient(45deg, rgba(167, 139, 250, 0.02) 0px, rgba(167, 139, 250, 0.02) 1px, transparent 1px, transparent 10px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .app-universe {
             display: flex;
-            gap: 4px;
+            width: 100vw;
+            width: 100dvw;
+            height: 100vh;
+            height: 100dvh;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* ========== SIDEBAR – transforms on mobile ========== */
+        .dimensional-sidebar {
+            width: min(360px, 85vw);
+            background: rgba(11, 7, 30, 0.85);
+            -webkit-backdrop-filter: blur(40px);
+            backdrop-filter: blur(40px);
+            border-right: 1px solid var(--glass-edge);
+            display: flex;
+            flex-direction: column;
+            padding: var(--space-xl) var(--space-lg);
+            gap: var(--space-lg);
+            z-index: 20;
+            box-shadow: 10px 0 40px -10px black;
+            overflow-y: auto;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .dimensional-sidebar {
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 100;
+                width: 85vw;
+                max-width: 320px;
+            }
+            
+            .dimensional-sidebar.sidebar-visible {
+                transform: translateX(0);
+            }
+            
+            .sidebar-toggle {
+                display: flex !important;
+                position: fixed;
+                left: var(--space-sm);
+                top: var(--space-sm);
+                z-index: 99;
+                width: var(--touch-target-min);
+                height: var(--touch-target-min);
+                border-radius: 30px;
+                background: rgba(21, 16, 40, 0.8);
+                backdrop-filter: blur(20px);
+                border: 1px solid var(--glass-edge-strong);
+                color: var(--text-secondary);
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+            
+            .sidebar-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.5);
+                backdrop-filter: blur(4px);
+                z-index: 90;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s;
+            }
+            
+            .sidebar-overlay.visible {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+
+        .sidebar-toggle {
+            display: none;
+        }
+
+        /* ========== MAIN CHAT REALM ========== */
+        .chat-realm {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .messages-vessel {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: var(--space-xl) var(--space-lg) calc(120px + env(safe-area-inset-bottom, 20px));
+            scroll-behavior: smooth;
+            position: relative;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .messages-vessel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to bottom, var(--bg-deepest), transparent);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .messages-container {
+            max-width: min(900px, 95%);
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+            position: relative;
+            z-index: 10;
+            width: 100%;
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero-sanctuary {
+            text-align: center;
+            padding: var(--space-xl) var(--space-lg);
+            margin: var(--space-lg) auto;
+            max-width: min(700px, 90%);
+            background: rgba(21, 16, 40, 0.4);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(167, 139, 250, 0.2);
+            border-radius: clamp(40px, 8vw, 80px);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .hero-symbol {
+            width: clamp(80px, 20vw, 120px);
+            height: clamp(80px, 20vw, 120px);
+            margin: 0 auto var(--space-lg);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            animation: morph 10s infinite;
+            display: flex;
             align-items: center;
             justify-content: center;
-            height: 40px;
+            font-size: clamp(2rem, 8vw, 4rem);
+            color: white;
+            box-shadow: 0 0 40px rgba(236, 72, 153, 0.2);
         }
-        
-        .voice-visualization.active span {
-            animation: voiceWave 0.5s infinite alternate;
+
+        .hero-title {
+            font-size: var(--font-size-hero);
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-sm);
+            word-break: break-word;
         }
-        
-        @keyframes voiceWave {
-            from { height: 5px; }
-            to { height: 30px; }
+
+        .hero-subtitle {
+            color: var(--text-tertiary);
+            font-size: var(--font-size-base);
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 var(--space-sm);
         }
-        
-        /* Comfortable spacing for therapy */
-        .therapy-spacing {
-            line-height: 1.8;
-            letter-spacing: 0.01em;
+
+        /* ========== MESSAGE BUBBLES ========== */
+        .message-user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #2a1e3c, #1f1630);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: clamp(24px, 6vw, 40px) clamp(24px, 6vw, 40px) clamp(8px, 2vw, 12px) clamp(24px, 6vw, 40px);
+            padding: clamp(1rem, 3vw, 1.4rem) clamp(1.2rem, 4vw, 2rem);
+            max-width: min(85%, 600px);
+            color: var(--text-primary);
+            font-weight: 350;
+            line-height: 1.6;
+            font-size: var(--font-size-base);
+            box-shadow: 0 20px 30px -10px black;
+            word-break: break-word;
         }
-        
-        /* Empathy highlight */
-        .empathy-word {
+
+        .message-tyaza-wrapper {
+            display: flex;
+            gap: clamp(0.8rem, 2vw, 1.5rem);
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .tyaza-avatar-neural {
+            width: clamp(40px, 8vw, 56px);
+            height: clamp(40px, 8vw, 56px);
+            background: linear-gradient(145deg, var(--primary), var(--secondary));
+            border-radius: clamp(20px, 4vw, 30px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            color: white;
+            box-shadow: 0 0 30px var(--primary);
+            flex-shrink: 0;
+        }
+
+        .tyaza-bubble-neural {
+            background: rgba(21, 16, 40, 0.7);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(167, 139, 250, 0.2);
+            border-radius: clamp(24px, 6vw, 40px) clamp(24px, 6vw, 40px) clamp(24px, 6vw, 40px) clamp(8px, 2vw, 16px);
+            padding: clamp(1rem, 3vw, 1.6rem) clamp(1.2rem, 4vw, 2.2rem);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: var(--font-size-base);
+            width: 100%;
+            box-shadow: 0 20px 40px -12px black;
+            word-break: break-word;
+        }
+
+        /* ========== INPUT AREA (always at bottom) ========== */
+        .input-realm {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: var(--space-lg) var(--space-lg) max(env(safe-area-inset-bottom, 20px), var(--space-lg));
+            background: linear-gradient(to top, var(--bg-deepest) 70%, transparent);
+            z-index: 30;
+        }
+
+        .input-vessel {
+            max-width: min(900px, 95%);
+            margin: 0 auto;
+            background: rgba(21, 16, 40, 0.9);
+            -webkit-backdrop-filter: blur(30px);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            border-radius: clamp(40px, 10vw, 80px);
+            padding: clamp(0.3rem, 1.5vw, 0.5rem) clamp(0.3rem, 1.5vw, 0.5rem) clamp(0.3rem, 1.5vw, 0.5rem) clamp(1rem, 3vw, 2rem);
+            display: flex;
+            align-items: flex-end;
+            gap: clamp(0.3rem, 1.5vw, 0.75rem);
+            box-shadow: 0 20px 40px -10px black;
+            transition: all 0.3s;
+        }
+
+        .input-vessel textarea {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: var(--font-size-base);
+            padding: clamp(0.8rem, 2vw, 1.25rem) 0;
+            resize: none;
+            max-height: min(150px, 30vh);
+            line-height: 1.5;
+            font-weight: 350;
+            width: 100%;
+            min-height: clamp(40px, 10vw, 44px);
+        }
+
+        .input-vessel textarea::placeholder {
+            color: var(--text-tertiary);
+            font-size: var(--font-size-base);
+        }
+
+        /* ========== BUTTONS ========== */
+        .send-button-neural {
+            width: clamp(48px, 12vw, 64px);
+            height: clamp(48px, 12vw, 64px);
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a78bfa, #ec4899);
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            flex-shrink: 0;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .send-button-neural:active {
+            transform: scale(0.9);
+        }
+
+        .send-button-neural:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .voice-button-neural {
+            width: clamp(44px, 10vw, 56px);
+            height: clamp(44px, 10vw, 56px);
+            border-radius: 50%;
+            background: rgba(167, 139, 250, 0.15);
+            border: 1px solid rgba(249, 168, 212, 0.4);
             color: var(--secondary);
-            font-weight: 500;
-            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: clamp(1.1rem, 4vw, 1.4rem);
+            flex-shrink: 0;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .voice-button-neural:active {
+            transform: scale(0.95);
+            background: rgba(249, 168, 212, 0.3);
+        }
+
+        .voice-button-neural.listening {
+            background: #ec4899;
+            color: white;
+            border-color: white;
+            animation: pulseListening 1.5s infinite;
+        }
+
+        /* ========== VOICE STUDIO (sidebar) ========== */
+        .voice-studio {
+            background: rgba(21, 16, 40, 0.6);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-edge);
+            border-radius: clamp(24px, 5vw, 32px);
+            padding: var(--space-lg) var(--space-md);
+        }
+
+        .mic-visualizer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: clamp(40px, 8vw, 60px);
+            gap: 2px;
+        }
+
+        .vis-bar {
+            flex: 1;
+            background: linear-gradient(to top, #a78bfa, #f9a8d4);
+            border-radius: 20px;
+            height: 100%;
+            min-height: 4px;
+            transition: height 0.1s ease;
+        }
+
+        /* ========== HISTORY ========== */
+        .history-item-neural {
+            padding: var(--space-md);
+            border-radius: clamp(16px, 4vw, 24px);
+            background: rgba(167, 139, 250, 0.05);
+            border-left: 4px solid transparent;
+            margin-bottom: var(--space-xs);
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: var(--font-size-sm);
+            word-break: break-word;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .history-item-neural.active {
+            border-left-color: var(--secondary);
+            background: rgba(249, 168, 212, 0.1);
+        }
+
+        /* ========== SCROLL BUTTON ========== */
+        .scroll-elevator {
+            position: absolute;
+            bottom: calc(100px + env(safe-area-inset-bottom, 20px));
+            right: max(env(safe-area-inset-right, 20px), var(--space-lg));
+            background: rgba(21, 16, 40, 0.9);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--secondary);
+            border-radius: 50px;
+            padding: var(--space-sm) var(--space-lg);
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            z-index: 40;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+            box-shadow: 0 0 25px var(--primary);
+            white-space: nowrap;
+            touch-action: manipulation;
+        }
+
+        .scroll-elevator.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* ========== VOICE STATUS ========== */
+        .voice-status-neural {
+            text-align: center;
+            min-height: var(--space-xl);
+            margin-top: var(--space-sm);
+            font-size: var(--font-size-sm);
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xs);
+            flex-wrap: wrap;
+            padding: 0 var(--space-sm);
+        }
+
+        /* ========== UTILITY CLASSES ========== */
+        .hidden { display: none; }
+        .text-xs { font-size: var(--font-size-xs); }
+        .text-sm { font-size: var(--font-size-sm); }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .gap-2 { gap: var(--space-sm); }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes morph {
+            0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            33% { border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%; }
+            66% { border-radius: 30% 70% 40% 60% / 60% 30% 70% 40%; }
+        }
+
+        @keyframes pulseListening {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(236,72,153,0.7); }
+            50% { box-shadow: 0 0 0 15px rgba(236,72,153,0); }
+        }
+
+        @keyframes neuralTyping {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+            30% { transform: translateY(-8px); opacity: 1; }
+        }
+
+        .neural-typing {
+            display: flex;
+            gap: 0.4rem;
+            padding: 0.5rem 0;
+        }
+
+        .neural-typing .dot {
+            width: clamp(6px, 2vw, 10px);
+            height: clamp(6px, 2vw, 10px);
+            background: var(--primary);
+            border-radius: 50%;
+            animation: neuralTyping 1.4s infinite;
+        }
+
+        .neural-typing .dot:nth-child(2) { animation-delay: 0.2s; background: var(--secondary); }
+        .neural-typing .dot:nth-child(3) { animation-delay: 0.4s; background: var(--tertiary); }
+
+        /* custom scroll */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 20px; }
+
+        /* landscape optimization */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .hero-sanctuary { padding: var(--space-md); margin: var(--space-sm) auto; }
+            .hero-symbol { width: 60px; height: 60px; font-size: 2rem; }
+            .input-realm { padding-bottom: max(env(safe-area-inset-bottom, 10px), var(--space-sm)); }
+            .messages-vessel { padding-bottom: 100px; }
+        }
+
+        /* safe area support */
+        @supports (padding: max(0px)) {
+            .input-realm {
+                padding-left: max(env(safe-area-inset-left, 20px), var(--space-lg));
+                padding-right: max(env(safe-area-inset-right, 20px), var(--space-lg));
+                padding-bottom: max(env(safe-area-inset-bottom, 20px), var(--space-lg));
+            }
+            .messages-vessel {
+                padding-left: max(env(safe-area-inset-left, 20px), var(--space-lg));
+                padding-right: max(env(safe-area-inset-right, 20px), var(--space-lg));
+            }
+            .scroll-elevator {
+                right: max(env(safe-area-inset-right, 20px), var(--space-lg));
+                bottom: max(env(safe-area-inset-bottom, 20px) + 80px, 100px);
+            }
+        }
+
+        /* STT overlay */
+        .stt-indicator {
+            position: fixed;
+            bottom: 50%;
+            left: 50%;
+            transform: translate(-50%, 50%);
+            background: rgba(21, 16, 40, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--secondary);
+            border-radius: 60px;
+            padding: var(--space-lg) var(--space-xl);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-md);
+            box-shadow: 0 0 50px var(--secondary);
+            max-width: 90vw;
+            width: auto;
+            text-align: center;
+            transition: opacity 0.3s;
+        }
+
+        .stt-indicator.hidden { opacity: 0; pointer-events: none; }
+
+        .stt-wave {
+            display: flex;
+            gap: 4px;
+            height: 60px;
+            align-items: center;
+        }
+
+        .stt-wave span {
+            width: clamp(4px, 2vw, 6px);
+            background: linear-gradient(to top, var(--primary), var(--secondary));
+            border-radius: 10px;
+            animation: sttWave 0.8s infinite alternate;
+        }
+
+        .stt-wave span:nth-child(2) { animation-delay: 0.1s; height: 30px; }
+        .stt-wave span:nth-child(3) { animation-delay: 0.2s; height: 45px; }
+        .stt-wave span:nth-child(4) { animation-delay: 0.3s; height: 25px; }
+        .stt-wave span:nth-child(5) { animation-delay: 0.4s; height: 40px; }
+
+        @keyframes sttWave {
+            0% { height: 10px; }
+            100% { height: 60px; }
         }
     </style>
 </head>
-<body class="flex h-screen">
+<body>
+    <div class="cosmic-web"></div>
 
-    <!-- SCROLL TO BOTTOM BUTTON -->
-    <div id="scroll-bottom-btn" class="scroll-bottom-btn" onclick="scrollToBottom()">
-        <span class="flex items-center gap-2">?? Scroll to latest</span>
+    <!-- mobile sidebar controls -->
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">?</button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="app-universe">
+        <!-- Sidebar – fluid controls -->
+        <aside class="dimensional-sidebar custom-scroll" id="sidebar">
+            <button class="quantum-button" onclick="window.neuralNewSession()" style="width:100%; background:linear-gradient(135deg, rgba(167,139,250,0.15), rgba(249,168,212,0.1)); border:1px solid var(--glass-edge-strong); border-radius:60px; padding:var(--space-md); display:flex; align-items:center; gap:var(--space-sm); cursor:pointer;">
+                <span>??</span> new sanctuary
+            </button>
+
+            <div class="voice-studio">
+                <div class="voice-studio-title" style="display:flex; align-items:center; gap:0.5rem; font-size:var(--font-size-xs); color:var(--text-tertiary); margin-bottom:var(--space-md);">
+                    <span>???</span> neural voice studio
+                </div>
+
+                <div class="mic-visualizer-container" style="background:rgba(0,0,0,0.3); border-radius:40px; padding:var(--space-md); margin-bottom:var(--space-md);">
+                    <div id="micVisualizer" class="mic-visualizer">
+                        <div class="vis-bar" style="height:20px;"></div>
+                        <div class="vis-bar" style="height:35px;"></div>
+                        <div class="vis-bar" style="height:15px;"></div>
+                        <div class="vis-bar" style="height:45px;"></div>
+                        <div class="vis-bar" style="height:25px;"></div>
+                        <div class="vis-bar" style="height:30px;"></div>
+                        <div class="vis-bar" style="height:18px;"></div>
+                    </div>
+                    <button id="neuralTestMic" class="quantum-button" style="width:100%; margin-top:var(--space-md); padding:var(--space-md); border-radius:40px; background:rgba(167,139,250,0.15); border:1px solid var(--glass-edge-strong);">
+                        <span>??</span> calibrate microphone
+                    </button>
+                </div>
+
+                <select id="neuralVoiceSelect" class="voice-selector-neural" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(167,139,250,0.3); border-radius:30px; padding:var(--space-md); color:white; margin-bottom:var(--space-md);">
+                    <optgroup label="?? most natural (neural)">
+                        <option value="Google UK English Female" selected>???? warm british · therapeutic</option>
+                        <option value="Google UK English Male">???? calm british · grounded</option>
+                        <option value="Microsoft Hazel - English (Great Britain)">?? hazel · neural empathy</option>
+                        <option value="Microsoft Susan - English (United States)">?? susan · gentle neural</option>
+                    </optgroup>
+                    <optgroup label="? premium emotional">
+                        <option value="Samantha">?? samantha · soft presence</option>
+                        <option value="Daniel">?? daniel · comforting depth</option>
+                        <option value="Karen">?? karen · warm australian</option>
+                        <option value="Moira">?? moira · irish solace</option>
+                    </optgroup>
+                </select>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-md); margin:var(--space-md) 0;">
+                    <div style="background:rgba(0,0,0,0.2); border-radius:24px; padding:var(--space-sm);">
+                        <label style="font-size:var(--font-size-xs); color:var(--text-tertiary);">?? pace <span id="rateValue">0.85</span></label>
+                        <input type="range" id="neuralRate" class="prosody-slider" min="0.5" max="1.5" step="0.05" value="0.85" style="width:100%;">
+                    </div>
+                    <div style="background:rgba(0,0,0,0.2); border-radius:24px; padding:var(--space-sm);">
+                        <label style="font-size:var(--font-size-xs); color:var(--text-tertiary);">?? pitch <span id="pitchValue">1.05</span></label>
+                        <input type="range" id="neuralPitch" class="prosody-slider" min="0.5" max="2" step="0.05" value="1.05" style="width:100%;">
+                    </div>
+                </div>
+
+                <button id="neuralPreviewVoice" class="quantum-button" style="width:100%; padding:var(--space-md); border-radius:40px; background:rgba(167,139,250,0.15); border:1px solid var(--glass-edge-strong); margin-bottom:var(--space-sm);">
+                    <span>??</span> preview voice
+                </button>
+
+                <label style="display:flex; align-items:center; gap:var(--space-sm); font-size:var(--font-size-sm); color:var(--text-secondary);">
+                    <input type="checkbox" id="neuralAutoTTS" checked> auto-speak responses
+                </label>
+
+                <div id="neuralVoiceBadge" class="voice-badge-neural hidden" style="background:rgba(139,92,246,0.15); border:1px solid rgba(249,168,212,0.3); border-radius:40px; padding:var(--space-sm); font-size:var(--font-size-xs); margin-top:var(--space-sm); display:flex; align-items:center; gap:var(--space-sm);">
+                    <span style="width:8px;height:8px; border-radius:50%; background:var(--tertiary);"></span>
+                    <span id="neuralVoiceQuality">neural voice ready</span>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin:var(--space-sm) 0;">
+                <span style="font-size:var(--font-size-xs); color:var(--text-tertiary);">?? PAST PORTALS</span>
+                <button id="neuralClearHistory" style="font-size:var(--font-size-xs); background:none; border:none; color:var(--text-tertiary); cursor:pointer;">clear</button>
+            </div>
+            <div id="neuralHistoryContainer" style="flex:1; overflow-y:auto;"></div>
+
+            <div style="margin-top:auto; padding-top:var(--space-lg); font-size:var(--font-size-xs); color:var(--text-tertiary); display:flex; justify-content:space-between;">
+                <span>TYAZA · fluid</span>
+                <span>v4.0</span>
+            </div>
+        </aside>
+
+        <!-- main chat realm -->
+        <main class="chat-realm">
+            <div id="chatViewport" class="messages-vessel custom-scroll">
+                <div id="heroSanctuary" class="hero-sanctuary">
+                    <div class="hero-symbol">T</div>
+                    <h1 class="hero-title">TYAZA</h1>
+                    <p class="hero-subtitle">fluid presence · therapeutic depth</p>
+                    <p style="color:#6b5b8a; max-width:500px; margin:var(--space-lg) auto 0; font-size:var(--font-size-sm);">"I'm here. Every breath, every word — held in safe space."</p>
+                </div>
+
+                <div id="neuralMessageContainer" class="messages-container"></div>
+            </div>
+
+            <!-- input realm with voice -->
+            <div class="input-realm">
+                <div class="input-vessel">
+                    <textarea id="neuralInput" rows="1" placeholder="share what's arising..." inputmode="text" enterkeyhint="send"></textarea>
+                    <button id="neuralVoiceBtn" class="voice-button-neural" title="speak" aria-label="Voice input">??</button>
+                    <button id="neuralSendBtn" class="send-button-neural" disabled aria-label="Send message">
+                        <svg viewBox="0 0 24 24" width="60%" height="60%">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="white" stroke-width="2" fill="none"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="neuralVoiceStatus" class="voice-status-neural"></div>
+            </div>
+        </main>
     </div>
 
-    <!-- SIDEBAR -->
-    <aside class="w-80 glass-sidebar flex flex-col p-4 z-30 border-r border-white/5">
-        <button onclick="startNewChat()" class="flex items-center gap-3 w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-purple-600/20 to-pink-600/10 hover:from-purple-600/30 hover:to-pink-600/20 transition-all border border-white/[0.05] mb-6 group">
-            <span class="text-xl text-purple-400 group-hover:scale-110 transition">+</span> 
-            <span class="text-sm font-medium tracking-wide">New therapy session</span>
-        </button>
-        
-        <!-- API Key Input -->
-        <div class="settings-panel">
-            <label class="text-xs text-gray-400 block mb-2">?? OpenRouter Key</label>
-            <input type="password" id="api-key-input" placeholder="sk-or-v1-..." 
-                   class="w-full bg-black/30 border border-purple-500/30 rounded-xl px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-purple-500">
-            <p class="text-[10px] text-gray-600 mt-2">Get free key at <a href="https://openrouter.ai" target="_blank" class="text-purple-400 hover:text-pink-400">openrouter.ai</a></p>
-        </div>
-        
-        <!-- Voice Settings with Wave Animation -->
-        <div class="settings-panel">
-            <label class="text-xs text-gray-400 block mb-3">?? Voice Therapy Settings</label>
-            
-            <button id="test-mic-btn" class="w-full mb-3 py-2.5 px-3 bg-purple-600/20 hover:bg-purple-600/30 rounded-xl text-sm text-purple-400 transition flex items-center justify-center gap-2">
-                <span>??</span> Test Microphone
-            </button>
-            
-            <div id="voice-wave" class="voice-visualization h-10 mb-3 hidden">
-                <span class="w-1 bg-purple-500"></span>
-                <span class="w-1 bg-pink-500"></span>
-                <span class="w-1 bg-purple-500"></span>
-                <span class="w-1 bg-pink-500"></span>
-                <span class="w-1 bg-purple-500"></span>
-            </div>
-            
-            <select id="voice-select" class="w-full bg-black/30 border border-purple-500/30 rounded-xl px-3 py-2.5 text-sm text-white mb-3">
-                <option value="Google UK English Female">???? Warm Female (Therapy)</option>
-                <option value="Google UK English Male">???? Calm Male (Therapy)</option>
-                <option value="Google US English">???? Soothing US English</option>
-                <option value="Microsoft David - English (United States)">???? Gentle David</option>
-                <option value="Microsoft Zira - English (United States)">???? Comforting Zira</option>
-            </select>
-            
-            <label class="flex items-center gap-2 text-xs text-gray-400 mb-2">
-                <input type="checkbox" id="auto-tts" checked class="accent-purple-500"> Auto-speak (therapeutic voice)
-            </label>
-            
-            <div class="mt-3 flex items-center gap-2 text-xs">
-                <span class="w-2.5 h-2.5 rounded-full bg-gray-600" id="mic-led"></span>
-                <span id="mic-status-text" class="text-gray-500">Ready for therapy session</span>
-            </div>
-        </div>
-        
-        <!-- Session History -->
-        <div class="flex items-center justify-between px-2 mb-3">
-            <div class="text-xs text-gray-400 font-semibold tracking-wider">?? PAST SESSIONS</div>
-            <button id="clear-history-btn" class="text-xs text-gray-600 hover:text-pink-400 transition px-2 py-1">Clear</button>
-        </div>
-        
-        <div class="flex-1 overflow-y-auto custom-scroll space-y-1 pr-1" id="history-list"></div>
-        
-        <div class="mt-4 pt-4 border-t border-white/5 text-xs text-gray-600 flex items-center justify-between px-2">
-            <span class="flex items-center gap-2">TYAZA � Therapy AI <span class="w-2 h-2 rounded-full bg-purple-400/70 animate-pulse"></span></span>
-            <span>v2.0</span>
-        </div>
-    </aside>
+    <!-- scroll to bottom button -->
+    <div id="neuralScrollBtn" class="scroll-elevator" onclick="neuralScrollToBottom()">
+        <span>??</span> return to now
+    </div>
 
-    <!-- MAIN CHAT - FULL SCREEN AI RESPONSES -->
-    <main class="flex-1 flex flex-col relative">
-        <div class="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-[#0a0a0c] to-transparent z-10 pointer-events-none"></div>
-
-        <!-- CHAT VIEWPORT -->
-        <div id="chat-viewport" class="flex-1 overflow-y-auto custom-scroll flex flex-col items-center px-4">
-            <div id="hero" class="mt-32 text-center transition-all duration-700 select-none">
-                <div class="w-24 h-24 mx-auto mb-6 rounded-3xl bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center shadow-2xl">
-                    <span class="text-5xl text-white">T</span>
-                </div>
-                <h1 class="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">TYAZA</h1>
-                <p class="text-gray-500 mt-3 text-lg">Your therapeutic companion � here to listen</p>
-                <p class="text-gray-700 text-sm mt-8 max-w-md mx-auto">"I'm here for you. Take your time, breathe, and share what's on your mind."</p>
-            </div>
-            
-            <!-- Message container - FULL WIDTH for AI responses -->
-            <div id="message-container" class="w-full max-w-4xl px-2 pb-32 pt-8 space-y-6 ai-response-full"></div>
-            <div id="scroll-anchor" class="h-10"></div>
+    <!-- STT indicator overlay -->
+    <div id="sttIndicator" class="stt-indicator hidden">
+        <div class="stt-wave">
+            <span></span><span></span><span></span><span></span><span></span>
         </div>
-
-        <!-- INPUT BAR -->
-        <div class="w-full max-w-4xl mx-auto px-4 pb-6 absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/95 to-transparent pt-10">
-            <div class="bg-[#16161c] rounded-[30px] p-1.5 flex items-end shadow-2xl border border-purple-500/20">
-                <!-- Voice Input Button -->
-                <button id="voice-input-btn" class="voice-btn h-14 w-14 rounded-full flex items-center justify-center text-gray-400 hover:text-purple-400 transition-all mr-1" title="Click to speak">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2v12M12 19v3M9 21h6M4 12h2M18 12h2"/>
-                        <circle cx="12" cy="12" r="8" stroke="currentColor" fill="none"/>
-                    </svg>
-                </button>
-                
-                <textarea id="user-input" rows="1" placeholder="Share your thoughts here..." class="bg-transparent border-none outline-none w-full text-[16px] py-4 px-3 resize-none custom-scroll max-h-32 placeholder:text-gray-600 therapy-spacing"></textarea>
-                
-                <button id="send-btn" class="h-14 w-14 rounded-full flex items-center justify-center bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg disabled:opacity-30 disabled:from-gray-600 disabled:to-gray-600 transition-all hover:scale-105 mr-1" disabled>
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                </button>
-            </div>
-            
-            <!-- Voice Status with Wave Animation -->
-            <div id="voice-status" class="text-center text-sm text-purple-400 mt-3 h-6 flex items-center justify-center gap-2"></div>
-            <p class="text-center text-xs text-gray-700 mt-2">TYAZA listens with empathy � concise by default, deep when you need</p>
-        </div>
-    </main>
+        <div style="font-size:var(--font-size-base); color:var(--secondary);">listening...</div>
+        <div style="font-size:var(--font-size-xs); color:var(--text-tertiary);" id="sttTranscript"></div>
+    </div>
 
     <script>
         (function() {
-            // DOM elements
-            const container = document.getElementById('message-container');
-            const viewport = document.getElementById('chat-viewport');
-            const input = document.getElementById('user-input');
-            const btn = document.getElementById('send-btn');
-            const historyDiv = document.getElementById('history-list');
-            const hero = document.getElementById('hero');
-            const apiKeyInput = document.getElementById('api-key-input');
-            const voiceBtn = document.getElementById('voice-input-btn');
-            const voiceStatus = document.getElementById('voice-status');
-            const voiceSelect = document.getElementById('voice-select');
-            const autoTTS = document.getElementById('auto-tts');
-            const testMicBtn = document.getElementById('test-mic-btn');
-            const micLed = document.getElementById('mic-led');
-            const micStatusText = document.getElementById('mic-status-text');
-            const clearHistoryBtn = document.getElementById('clear-history-btn');
-            const scrollBottomBtn = document.getElementById('scroll-bottom-btn');
-            const voiceWave = document.getElementById('voice-wave');
+            // ========== CONFIG ==========
+            const API_KEY = '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';
 
-            // State
+            // DOM elements
+            const viewport = document.getElementById('chatViewport');
+            const msgContainer = document.getElementById('neuralMessageContainer');
+            const hero = document.getElementById('heroSanctuary');
+            const inputEl = document.getElementById('neuralInput');
+            const sendBtn = document.getElementById('neuralSendBtn');
+            const voiceBtn = document.getElementById('neuralVoiceBtn');
+            const voiceStatus = document.getElementById('neuralVoiceStatus');
+            const testMicBtn = document.getElementById('neuralTestMic');
+            const voiceSelect = document.getElementById('neuralVoiceSelect');
+            const rateRange = document.getElementById('neuralRate');
+            const pitchRange = document.getElementById('neuralPitch');
+            const rateValue = document.getElementById('rateValue');
+            const pitchValue = document.getElementById('pitchValue');
+            const autoTTS = document.getElementById('neuralAutoTTS');
+            const previewBtn = document.getElementById('neuralPreviewVoice');
+            const voiceBadge = document.getElementById('neuralVoiceBadge');
+            const voiceQuality = document.getElementById('neuralVoiceQuality');
+            const clearHistory = document.getElementById('neuralClearHistory');
+            const historyContainer = document.getElementById('neuralHistoryContainer');
+            const scrollBtn = document.getElementById('neuralScrollBtn');
+            const visualizerBars = document.querySelectorAll('.vis-bar');
+            const sttIndicator = document.getElementById('sttIndicator');
+            const sttTranscript = document.getElementById('sttTranscript');
+            
+            // sidebar
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+            // state
             let currentChat = [];
+            let currentChatId = Date.now();
             let isGenerating = false;
+            let micPermission = false;
             let recognition = null;
             let isListening = false;
             let synth = window.speechSynthesis;
-            let micPermission = false;
-            let micStream = null;
-            let currentChatId = Date.now();
-            let isAtBottom = true;
+            let availableVoices = [];
             let audioContext = null;
             let analyser = null;
             let microphone = null;
-            let javascriptNode = null;
+            let animationFrame = null;
+            let mediaStream = null;
 
-            // Load API key
-            const savedKey = localStorage.getItem('tyaza_therapy_key');
-            if (savedKey) apiKeyInput.value = savedKey;
-
-            apiKeyInput.addEventListener('input', function() {
-                if (this.value.startsWith('sk-or-v1-')) {
-                    localStorage.setItem('tyaza_therapy_key', this.value);
-                }
-            });
-
-            // Scroll detection
-            viewport.addEventListener('scroll', () => {
-                const scrollPosition = viewport.scrollTop + viewport.clientHeight;
-                const scrollHeight = viewport.scrollHeight;
-                isAtBottom = scrollHeight - scrollPosition < 150;
-                scrollBottomBtn.classList.toggle('visible', !isAtBottom);
-            });
-
-            window.scrollToBottom = () => {
-                viewport.scrollTo({ top: viewport.scrollHeight, behavior: 'smooth' });
-            };
-
-            // Initialize audio visualization
-            async function initAudioVisualization(stream) {
-                try {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    analyser = audioContext.createAnalyser();
-                    microphone = audioContext.createMediaStreamSource(stream);
-                    javascriptNode = audioContext.createScriptProcessor(256, 1, 1);
-                    
-                    analyser.smoothingTimeConstant = 0.8;
-                    analyser.fftSize = 512;
-                    
-                    microphone.connect(analyser);
-                    analyser.connect(javascriptNode);
-                    javascriptNode.connect(audioContext.destination);
-                    
-                    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-                    
-                    javascriptNode.onaudioprocess = () => {
-                        if (!isListening) return;
-                        
-                        analyser.getByteFrequencyData(dataArray);
-                        const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
-                        
-                        // Update wave visualization
-                        const waveBars = voiceWave?.querySelectorAll('span');
-                        if (waveBars) {
-                            const intensity = average / 128;
-                            waveBars.forEach((bar, i) => {
-                                bar.style.height = `${5 + (intensity * 25 * (i + 1) / 5)}px`;
-                            });
-                        }
-                    };
-                } catch (e) {
-                    console.log('Audio visualization not supported');
-                }
+            // ========== SIDEBAR TOGGLE (mobile) ==========
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.add('sidebar-visible');
+                    sidebarOverlay.classList.add('visible');
+                });
+                sidebarOverlay.addEventListener('click', () => {
+                    sidebar.classList.remove('sidebar-visible');
+                    sidebarOverlay.classList.remove('visible');
+                });
             }
 
-            // Request microphone with visualization
-            async function requestMicrophonePermission() {
-                try {
-                    if (micStream) {
-                        micStream.getTracks().forEach(track => track.stop());
-                    }
-                    
-                    micStream = await navigator.mediaDevices.getUserMedia({ 
-                        audio: {
-                            echoCancellation: true,
-                            noiseSuppression: true,
-                            autoGainControl: true
-                        } 
-                    });
-                    
-                    micPermission = true;
-                    micLed.className = 'w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse';
-                    micStatusText.textContent = 'Microphone ready � speak anytime';
-                    
-                    voiceBtn.classList.remove('text-gray-400');
-                    voiceBtn.classList.add('text-green-400');
-                    
-                    // Initialize visualization
-                    voiceWave.classList.remove('hidden');
-                    voiceWave.classList.add('flex');
-                    await initAudioVisualization(micStream);
-                    
-                    initSpeechRecognition();
-                    
-                    voiceStatus.innerHTML = '<span class="text-green-400">? Microphone ready for therapy session</span>';
-                    setTimeout(() => voiceStatus.innerHTML = '', 3000);
-                    
-                    return true;
-                } catch (error) {
-                    micPermission = false;
-                    micLed.className = 'w-2.5 h-2.5 rounded-full bg-red-500';
-                    micStatusText.textContent = 'Please allow microphone access';
-                    voiceWave.classList.add('hidden');
-                    voiceStatus.innerHTML = '<span class="text-red-400">? Microphone access needed for voice therapy</span>';
-                    return false;
-                }
-            }
-
-            // Initialize speech recognition with better quality
+            // ========== SPEECH RECOGNITION SETUP ==========
             function initSpeechRecognition() {
-                if (!('webkitSpeechRecognition' in window)) {
-                    voiceStatus.innerHTML = '<span class="text-red-400">? Please use Chrome for voice therapy</span>';
+                if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+                    voiceStatus.innerHTML = '<span>?? please use Chrome/Edge/Safari for voice</span>';
                     return false;
                 }
-
-                recognition = new webkitSpeechRecognition();
+                const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SR();
                 recognition.continuous = false;
                 recognition.interimResults = true;
-                recognition.maxAlternatives = 1;
+                recognition.maxAlternatives = 3;
                 recognition.lang = 'en-US';
-                
-                // Better noise handling
-                recognition.continuous = false;
-                recognition.interimResults = true;
 
                 recognition.onstart = () => {
                     isListening = true;
                     voiceBtn.classList.add('listening');
-                    voiceStatus.innerHTML = `
-                        <div class="flex items-center gap-2">
-                            <span class="wave-animation">
-                                <span></span><span></span><span></span><span></span><span></span>
-                            </span>
-                            <span class="text-pink-400">Listening with empathy...</span>
-                        </div>`;
-                    micLed.className = 'w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse';
+                    sttIndicator.classList.remove('hidden');
+                    voiceStatus.innerHTML = window.innerWidth < 768 
+                        ? '<span>?? listening... tap mic to stop</span>'
+                        : '<div style="display:flex; gap:0.5rem;"><span class="neural-typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span><span>listening with depth...</span></div>';
                 };
 
                 recognition.onend = () => {
                     isListening = false;
                     voiceBtn.classList.remove('listening');
-                    voiceStatus.innerHTML = '';
-                    micLed.className = 'w-2.5 h-2.5 rounded-full bg-green-500';
-                    
-                    // Auto-send if there's text
-                    if (input.value.trim()) {
-                        sendMessage();
-                    }
+                    sttIndicator.classList.add('hidden');
+                    if (inputEl.value.trim()) sendMessage();
+                    else voiceStatus.innerHTML = '';
                 };
 
                 recognition.onresult = (event) => {
                     let transcript = '';
+                    let confidence = 0;
                     for (let i = 0; i < event.results.length; i++) {
                         transcript += event.results[i][0].transcript;
+                        confidence = event.results[i][0].confidence;
                     }
-                    
-                    input.value = transcript;
-                    input.style.height = 'auto';
-                    input.style.height = Math.min(input.scrollHeight, 128) + 'px';
-                    
-                    if (transcript.trim()) {
-                        btn.disabled = false;
-                    }
-                    
-                    // Show confidence
-                    const confidence = event.results[0][0].confidence;
-                    if (confidence < 0.7 && event.results[0].isFinal) {
-                        voiceStatus.innerHTML = '<span class="text-yellow-400">?? Could you repeat that more clearly?</span>';
+                    inputEl.value = transcript;
+                    inputEl.style.height = 'auto';
+                    inputEl.style.height = Math.min(inputEl.scrollHeight, 150) + 'px';
+                    sendBtn.disabled = !transcript.trim() || isGenerating;
+                    sttTranscript.textContent = transcript;
+                    if (confidence < 0.65 && event.results[0].isFinal) {
+                        voiceStatus.innerHTML = '<span style="color: #facc15;">could you repeat more clearly?</span>';
                     }
                 };
 
-                recognition.onerror = (event) => {
-                    let message = '';
-                    switch(event.error) {
-                        case 'no-speech': message = 'No speech detected. Try again.'; break;
-                        case 'audio-capture': message = 'Microphone not working.'; break;
-                        case 'not-allowed': message = 'Please allow microphone access.'; break;
-                        default: message = `Error: ${event.error}`;
-                    }
-                    voiceStatus.innerHTML = `<span class="text-red-400">? ${message}</span>`;
+                recognition.onerror = (e) => {
+                    voiceStatus.innerHTML = `<span style="color: #f87171;">voice error: ${e.error}</span>`;
                     isListening = false;
                     voiceBtn.classList.remove('listening');
-                    micLed.className = 'w-2.5 h-2.5 rounded-full bg-green-500';
-                    
-                    setTimeout(() => voiceStatus.innerHTML = '', 3000);
+                    sttIndicator.classList.add('hidden');
                 };
-
                 return true;
             }
 
-            // Test mic button
-            testMicBtn.addEventListener('click', async (e) => {
-                e.preventDefault();
-                testMicBtn.innerHTML = '<span>?</span> Requesting...';
-                testMicBtn.disabled = true;
-                
-                const success = await requestMicrophonePermission();
-                
-                testMicBtn.innerHTML = success ? '<span>?</span> Microphone Ready' : '<span>?</span> Try Again';
-                setTimeout(() => {
-                    testMicBtn.innerHTML = '<span>??</span> Test Microphone';
-                    testMicBtn.disabled = false;
-                }, 2000);
-            });
-
-            // Voice input button
-            voiceBtn.addEventListener('click', async () => {
-                if (!('webkitSpeechRecognition' in window)) {
-                    alert('Voice therapy works best in Chrome browser');
-                    return;
-                }
-                
-                if (!micPermission) {
-                    voiceStatus.innerHTML = '<span class="text-yellow-400">? Setting up microphone...</span>';
-                    const granted = await requestMicrophonePermission();
-                    if (!granted) return;
-                }
-                
-                if (!recognition) {
-                    initSpeechRecognition();
-                }
-                
-                if (isListening) {
-                    recognition.stop();
-                } else {
+            // ========== MICROPHONE INIT + VISUALIZER ==========
+            async function initMicrophone() {
+                try {
+                    mediaStream = await navigator.mediaDevices.getUserMedia({ 
+                        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, sampleRate: 48000 } 
+                    });
+                    micPermission = true;
                     try {
-                        recognition.start();
-                    } catch (error) {
-                        // Reinitialize if needed
-                        initSpeechRecognition();
-                        setTimeout(() => recognition.start(), 100);
-                    }
-                }
-            });
+                        if (!audioContext) {
+                            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                            analyser = audioContext.createAnalyser();
+                            analyser.fftSize = 128;
+                            microphone = audioContext.createMediaStreamSource(mediaStream);
+                            microphone.connect(analyser);
+                            const bufferLength = analyser.frequencyBinCount;
+                            const dataArray = new Uint8Array(bufferLength);
+                            function updateVisualizer() {
+                                if (!analyser || !visualizerBars.length) return;
+                                analyser.getByteFrequencyData(dataArray);
+                                visualizerBars.forEach((bar, index) => {
+                                    if (index < 7) {
+                                        const value = dataArray[index * 4] || 0;
+                                        bar.style.height = Math.max(4, (value / 255) * 50) + 'px';
+                                    }
+                                });
+                                animationFrame = requestAnimationFrame(updateVisualizer);
+                            }
+                            updateVisualizer();
+                        }
+                    } catch (audioError) { console.log('visualizer not supported'); }
 
-            // High-quality TTS with therapy-optimized voice
-            function speakText(text) {
+                    voiceStatus.innerHTML = window.innerWidth < 768 
+                        ? '<span style="color: #6ee7b7;">? mic ready</span>'
+                        : '<span style="color: #6ee7b7;">??? microphone attuned · neural listening ready</span>';
+                    setTimeout(() => voiceStatus.innerHTML = '', 3000);
+
+                    initSpeechRecognition();
+                    return true;
+                } catch (error) {
+                    voiceStatus.innerHTML = '<span style="color: #f87171;">?? microphone access needed</span>';
+                    return false;
+                }
+            }
+
+            // ========== TEXT-TO-SPEECH ==========
+            function speakNeural(text) {
                 if (!synth || !autoTTS.checked) return;
-                
                 synth.cancel();
-                
-                // Clean text for speech
-                const cleanText = text
-                    .replace(/```[\s\S]*?```/g, '')
-                    .replace(/`([^`]+)`/g, '$1')
-                    .replace(/#{1,6}\s?/g, '')
-                    .replace(/[*_~]/g, '')
-                    .substring(0, 400);
-                
+                const cleanText = text.replace(/```[\s\S]*?```/g, '').replace(/[#*`_~]/g, '').replace(/<[^>]*>/g, '').substring(0, 500);
                 const utterance = new SpeechSynthesisUtterance(cleanText);
-                
-                // Get voices and select best therapy voice
-                const voices = synth.getVoices();
-                const preferredVoice = voiceSelect.value;
-                
-                // Try to find a warm, therapeutic voice
-                utterance.voice = voices.find(v => v.name === preferredVoice) || 
-                                 voices.find(v => v.name.includes('Female') && v.lang.includes('en')) ||
-                                 voices.find(v => v.lang.includes('en')) || 
-                                 voices[0];
-                
-                // Therapy-optimized settings
-                utterance.rate = 0.9;      // Slightly slower for therapy
-                utterance.pitch = 1.1;      // Slightly higher, more caring
-                utterance.volume = 1;
-                
-                // Add emotion markers in speech
-                utterance.onstart = () => {
-                    console.log('Speaking with therapeutic voice');
-                };
-                
+                const selectedName = voiceSelect.value;
+                utterance.voice = availableVoices.find(v => v.name === selectedName) || availableVoices.find(v => v.name.includes('Google')) || availableVoices[0];
+                utterance.rate = parseFloat(rateRange.value);
+                utterance.pitch = parseFloat(pitchRange.value);
                 synth.speak(utterance);
             }
 
-            // Load voices
-            if (synth) {
-                synth.onvoiceschanged = () => {
-                    const voices = synth.getVoices();
-                    console.log('Voices loaded for therapy:', voices.length);
-                };
+            function loadVoices() {
+                availableVoices = synth.getVoices();
+                if (availableVoices.length > 0) {
+                    const neuralVoices = availableVoices.filter(v => v.name.includes('Google') || v.name.includes('Neural') || v.name.includes('Natural') || v.name.includes('Premium'));
+                    if (neuralVoices.length > 0) {
+                        voiceQuality.textContent = `${neuralVoices.length} neural voices`;
+                        voiceBadge.classList.remove('hidden');
+                    }
+                }
             }
 
-            // Escape HTML
+            // ========== FORMATTING ==========
             function escapeHtml(text) {
-                return text.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
+                return text.replace(/[&<>]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' })[c]);
             }
 
-            // Format response with therapy styling
-            function formatResponse(text) {
+            function formatNeural(text) {
                 if (!text) return '';
-                
-                // Highlight empathy words
-                let formatted = escapeHtml(text);
-                const empathyWords = ['understand', 'feel', 'emotion', 'hear', 'there for you', 'safe', 'comfort', 'support'];
-                empathyWords.forEach(word => {
+                let escaped = escapeHtml(text);
+                const emotions = ['understand', 'feel', 'emotion', 'hear', 'safe', 'comfort', 'sorry', 'difficult', 'hard', 'alone', 'pain', 'sad', 'anxious', 'afraid', 'grateful', 'hope'];
+                emotions.forEach(word => {
                     const regex = new RegExp(`\\b(${word})\\b`, 'gi');
-                    formatted = formatted.replace(regex, '<span class="empathy-word">$1</span>');
+                    escaped = escaped.replace(regex, '<span style="color:var(--secondary);font-weight:450;">$1</span>');
                 });
-                
-                formatted = formatted.replace(/```([\s\S]*?)```/g, '<pre class="bg-black/30 p-4 rounded-xl my-3">$1</pre>');
-                formatted = formatted.replace(/`([^`]+)`/g, '<code class="bg-black/30 px-2 py-1 rounded">$1</code>');
-                formatted = formatted.replace(/\n\n/g, '<br><br>');
-                
-                return `<div class="markdown-style therapy-spacing">${formatted}</div>`;
+                escaped = escaped.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+                return `<div>${escaped}</div>`;
             }
 
-            // Typing effect for AI responses
-            async function typeResponse(element, text, speed = 20) {
-                const words = text.split(' ');
+            async function typeNeural(element, text, speed = 12) {
                 element.innerHTML = '';
-                
+                const words = text.split(' ');
                 for (let i = 0; i < words.length; i++) {
                     element.innerHTML += (i === 0 ? '' : ' ') + words[i];
-                    if (i < words.length - 1) {
-                        element.innerHTML += ' <span class="typing-cursor"></span>';
-                    }
-                    await new Promise(resolve => setTimeout(resolve, speed));
+                    if (i < words.length - 1) element.innerHTML += '<span style="display:inline-block;width:2px;height:1.2em;background:var(--secondary);margin-left:2px;animation:blink 1s infinite;"></span>';
+                    await new Promise(r => setTimeout(r, speed));
                 }
-                
-                // Final formatting
-                element.innerHTML = formatResponse(text);
+                element.innerHTML = formatNeural(text);
             }
 
-            // History functions
-            function saveToHistory(firstPrompt) {
-                if (!firstPrompt || currentChat.length === 0) return;
-                
-                const history = JSON.parse(localStorage.getItem('tyaza_therapy_chats') || '[]');
-                const existing = history.findIndex(c => c.id === currentChatId);
+            // ========== HISTORY ==========
+            function saveNeuralSession(firstMsg) {
+                if (!firstMsg || currentChat.length === 0) return;
+                const history = JSON.parse(localStorage.getItem('tyaza_fluid') || '[]');
+                const idx = history.findIndex(c => c.id === currentChatId);
                 const entry = {
                     id: currentChatId,
-                    title: firstPrompt.slice(0, 35),
+                    title: firstMsg.slice(0, 30) + (firstMsg.length > 30 ? '…' : ''),
                     messages: currentChat.slice(-30),
-                    timestamp: Date.now(),
-                    preview: currentChat[currentChat.length-1]?.content.slice(0, 40)
+                    timestamp: Date.now()
                 };
-                
-                if (existing !== -1) history[existing] = entry;
+                if (idx >= 0) history[idx] = entry;
                 else history.unshift(entry);
-                
-                localStorage.setItem('tyaza_therapy_chats', JSON.stringify(history.slice(0, 20)));
-                loadHistoryList();
+                localStorage.setItem('tyaza_fluid', JSON.stringify(history.slice(0, 20)));
+                renderHistory();
             }
 
-            function loadHistoryList() {
-                const history = JSON.parse(localStorage.getItem('tyaza_therapy_chats') || '[]');
-                
-                historyDiv.innerHTML = history.length ? history.map((c, i) => {
-                    const date = new Date(c.timestamp).toLocaleDateString([], { month: 'short', day: 'numeric' });
-                    return `
-                        <div class="history-item ${c.id === currentChatId ? 'active' : ''}" onclick="restoreChat(${i})">
-                            <div class="font-medium text-sm">${escapeHtml(c.title)}</div>
-                            <div class="flex justify-between items-center mt-1">
-                                <span class="text-[10px] text-gray-500">${date}</span>
-                                <span class="text-[10px] text-purple-400/70">${c.preview ? '?' : ''}</span>
-                            </div>
-                        </div>
-                    `;
-                }).join('') : '<div class="text-gray-600 text-sm px-3 py-4 text-center">? No past sessions<br><span class="text-xs">Start a new conversation</span></div>';
-            }
-
-            window.restoreChat = function(index) {
-                const history = JSON.parse(localStorage.getItem('tyaza_therapy_chats') || '[]');
-                const chat = history[index];
-                if (!chat) return;
-                
-                currentChatId = chat.id;
-                hero.style.display = 'none';
-                container.innerHTML = '';
-                currentChat = [];
-                
-                chat.messages.forEach(msg => {
-                    const div = document.createElement('div');
-                    div.className = 'message-enter w-full';
-                    
-                    if (msg.role === 'user') {
-                        div.innerHTML = `<div class="flex justify-end"><div class="chat-bubble-user">${escapeHtml(msg.content)}</div></div>`;
-                    } else {
-                        div.innerHTML = `
-                            <div class="flex gap-4 w-full">
-                                <div class="ai-avatar flex-shrink-0 mt-1"></div>
-                                <div class="flex-1 chat-bubble-ai">${formatResponse(msg.content)}</div>
-                            </div>`;
-                    }
-                    container.appendChild(div);
-                });
-                
-                currentChat = chat.messages;
-                loadHistoryList();
-                scrollToBottom();
-            };
-
-            window.startNewChat = () => {
-                container.innerHTML = '';
-                hero.style.display = 'block';
-                currentChat = [];
-                currentChatId = Date.now();
-                input.value = '';
-                btn.disabled = true;
-                loadHistoryList();
-                scrollToBottom();
-            };
-
-            clearHistoryBtn.onclick = () => {
-                if (confirm('Clear all therapy sessions?')) {
-                    localStorage.removeItem('tyaza_therapy_chats');
-                    startNewChat();
-                }
-            };
-
-            // Send message with typing effect
-            async function sendMessage() {
-                const text = input.value.trim();
-                if (!text || isGenerating) return;
-
-                const apiKey = apiKeyInput.value.trim();
-                if (!apiKey?.startsWith('sk-or-v1-')) {
-                    alert('Please enter your OpenRouter key for therapy sessions');
+            function renderHistory() {
+                const history = JSON.parse(localStorage.getItem('tyaza_fluid') || '[]');
+                if (history.length === 0) {
+                    historyContainer.innerHTML = '<div style="color:var(--text-tertiary); padding:var(--space-md);">no past sessions</div>';
                     return;
                 }
-
-                hero.style.display = 'none';
-                
-                // User message
-                container.innerHTML += `<div class="message-enter flex justify-end w-full"><div class="chat-bubble-user">${escapeHtml(text)}</div></div>`;
-                
-                // AI thinking with animation
-                const aiId = 'msg-' + Date.now();
-                container.innerHTML += `
-                    <div class="message-enter flex gap-4 w-full" id="wrapper-${aiId}">
-                        <div class="ai-avatar thinking"></div>
-                        <div class="flex-1 chat-bubble-ai" id="${aiId}">
-                            <div class="typing-animation">
-                                <span></span><span></span><span></span>
-                                <span class="text-gray-500 ml-2 text-sm">TYAZA is listening...</span>
-                            </div>
+                historyContainer.innerHTML = history.map((c, i) => {
+                    const active = c.id === currentChatId ? 'active' : '';
+                    return `
+                        <div class="history-item-neural ${active}" onclick="window.restoreNeural(${i})">
+                            <div style="font-weight:500;">${escapeHtml(c.title)}</div>
+                            <div style="font-size:var(--font-size-xs); color:var(--text-tertiary);">${new Date(c.timestamp).toLocaleDateString()}</div>
                         </div>
-                    </div>`;
-                
-                scrollToBottom();
-                
+                    `;
+                }).join('');
+            }
+
+            window.restoreNeural = (idx) => {
+                const history = JSON.parse(localStorage.getItem('tyaza_fluid') || '[]');
+                const chat = history[idx];
+                if (!chat) return;
+                currentChatId = chat.id;
+                currentChat = chat.messages.map(m => ({ role: m.role, content: m.content }));
+                hero.style.display = 'none';
+                msgContainer.innerHTML = '';
+                currentChat.forEach(msg => {
+                    if (msg.role === 'user') {
+                        msgContainer.innerHTML += `<div class="message-user">${escapeHtml(msg.content)}</div>`;
+                    } else {
+                        msgContainer.innerHTML += `
+                            <div class="message-tyaza-wrapper">
+                                <div class="tyaza-avatar-neural">T</div>
+                                <div class="tyaza-bubble-neural">${formatNeural(msg.content)}</div>
+                            </div>
+                        `;
+                    }
+                });
+                renderHistory();
+                neuralScrollToBottom();
+                if (window.innerWidth < 768) {
+                    sidebar.classList.remove('sidebar-visible');
+                    sidebarOverlay.classList.remove('visible');
+                }
+            };
+
+            window.neuralNewSession = () => {
+                hero.style.display = 'block';
+                msgContainer.innerHTML = '';
+                currentChat = [];
+                currentChatId = Date.now();
+                inputEl.value = '';
+                sendBtn.disabled = true;
+                renderHistory();
+            };
+
+            // ========== SEND MESSAGE ==========
+            async function sendMessage() {
+                const text = inputEl.value.trim();
+                if (!text || isGenerating) return;
+                hero.style.display = 'none';
+                msgContainer.innerHTML += `<div class="message-user">${escapeHtml(text)}</div>`;
                 currentChat.push({ role: 'user', content: text });
-                input.value = '';
-                btn.disabled = true;
+                const wrapperId = 'wrap-' + Date.now();
+                msgContainer.innerHTML += `
+                    <div id="${wrapperId}" class="message-tyaza-wrapper">
+                        <div class="tyaza-avatar-neural">T</div>
+                        <div class="tyaza-bubble-neural" id="bubble-${wrapperId}">
+                            <div class="neural-typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                        </div>
+                    </div>
+                `;
+                neuralScrollToBottom();
+                inputEl.value = '';
+                sendBtn.disabled = true;
                 isGenerating = true;
 
                 try {
-                    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-                        method: "POST",
+                    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                        method: 'POST',
                         headers: {
-                            "Authorization": `Bearer ${apiKey}`,
-                            "Content-Type": "application/json",
-                            "HTTP-Referer": window.location.origin,
-                            "X-Title": "TYAZA Therapy AI"
+                            'Authorization': `Bearer ${API_KEY}`,
+                            'Content-Type': 'application/json',
+                            'HTTP-Referer': location.origin,
+                            'X-Title': 'TYAZA Fluid'
                         },
                         body: JSON.stringify({
-                            "model": "openrouter/free",
-                            "messages": [
-                                { 
-                                    "role": "system", 
-                                    "content": `You are TYAZA, a compassionate therapeutic AI assistant. 
-                                    Guidelines:
-                                    - Respond with warmth, empathy, and genuine care
-                                    - Keep responses concise (2-4 sentences) unless user asks for more
-                                    - Use gentle, supportive language
-                                    - Acknowledge feelings and validate experiences
-                                    - Never be clinical or robotic
-                                    - Offer hope and comfort
-                                    - If user seems distressed, respond with extra care
-                                    - Use phrases like "I hear you", "that sounds difficult", "you're not alone"
-                                    - Be present and attentive in your responses`
-                                },
-                                ...currentChat.map(m => ({ role: m.role, content: m.content }))
+                            model: 'openrouter/free',
+                            messages: [
+                                { role: 'system', content: 'You are TYAZA, a deeply compassionate therapeutic companion. Respond with warmth, presence, and emotional attunement. Keep responses concise (2-4 sentences) but profound. Use natural, caring language. Validate feelings.' },
+                                ...currentChat
                             ],
-                            "max_tokens": 500,
-                            "temperature": 0.8
+                            max_tokens: 400,
+                            temperature: 0.85
                         })
                     });
 
-                    if (!response.ok) throw new Error('Unable to connect. Please try again.');
-                    
+                    if (!response.ok) throw new Error('connection issue');
                     const data = await response.json();
-                    const answer = data.choices?.[0]?.message?.content || "I'm here for you. Could you tell me more about what's on your mind?";
-                    
-                    // Type the response
-                    const aiEl = document.getElementById(aiId);
-                    await typeResponse(aiEl, answer, 15);
-                    
-                    // Remove thinking class
-                    document.querySelector(`#wrapper-${aiId} .ai-avatar`).classList.remove('thinking');
-                    
-                    // Speak if enabled
-                    if (autoTTS.checked) {
-                        setTimeout(() => speakText(answer), 100);
-                    }
-                    
-                    currentChat.push({ role: 'assistant', content: answer });
-                    
-                    if (currentChat.length === 2) saveToHistory(text);
+                    const reply = data.choices?.[0]?.message?.content || "I'm here. Tell me more.";
 
+                    const bubble = document.getElementById(`bubble-${wrapperId}`);
+                    await typeNeural(bubble, reply, 12);
+                    
+                    if (autoTTS.checked) speakNeural(reply);
+
+                    currentChat.push({ role: 'assistant', content: reply });
+                    if (currentChat.length === 2) saveNeuralSession(text);
                 } catch (error) {
-                    const aiEl = document.getElementById(aiId);
-                    aiEl.innerHTML = `<span class="text-red-400">I'm having trouble connecting. Please check your connection and try again.</span>`;
-                    document.querySelector(`#wrapper-${aiId} .ai-avatar`).classList.remove('thinking');
+                    const bubble = document.getElementById(`bubble-${wrapperId}`);
+                    if (bubble) bubble.innerHTML = '<span style="color: #f87171;">connection faltered. try again?</span>';
                 } finally {
                     isGenerating = false;
                 }
             }
 
-            // Input handlers
-            input.oninput = function() {
+            // ========== EVENT LISTENERS ==========
+            inputEl.addEventListener('input', function() {
                 this.style.height = 'auto';
-                this.style.height = Math.min(this.scrollHeight, 128) + 'px';
-                btn.disabled = !this.value.trim() || isGenerating;
-            };
+                this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+                sendBtn.disabled = !this.value.trim() || isGenerating;
+            });
+            inputEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!sendBtn.disabled) sendMessage(); }
+            });
+            sendBtn.addEventListener('click', sendMessage);
 
-            btn.onclick = sendMessage;
-            input.onkeydown = (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    !btn.disabled && sendMessage();
+            voiceBtn.addEventListener('click', async () => {
+                if (!micPermission && !(await initMicrophone())) return;
+                if (!recognition) initSpeechRecognition();
+                if (isListening) recognition.stop();
+                else {
+                    try { recognition.start(); } catch { initSpeechRecognition(); setTimeout(() => recognition.start(), 100); }
                 }
-            };
+            });
 
-            // Initialize
+            testMicBtn.addEventListener('click', async () => {
+                testMicBtn.innerHTML = '<span>?</span> calibrating...';
+                const success = await initMicrophone();
+                testMicBtn.innerHTML = success ? '<span>?</span> mic ready' : '<span>?</span> try again';
+                setTimeout(() => { testMicBtn.innerHTML = '<span>??</span> calibrate microphone'; }, 2000);
+            });
+
+            previewBtn.addEventListener('click', () => {
+                speakNeural("I'm here with you. There's no need to rush. How are you feeling?");
+            });
+
+            rateRange.addEventListener('input', () => { rateValue.textContent = rateRange.value; });
+            pitchRange.addEventListener('input', () => { pitchValue.textContent = pitchRange.value; });
+
+            // scroll handling
+            viewport.addEventListener('scroll', () => {
+                const atBottom = viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight < 100;
+                scrollBtn.classList.toggle('visible', !atBottom);
+            });
+            window.neuralScrollToBottom = () => { viewport.scrollTo({ top: viewport.scrollHeight, behavior: 'smooth' }); };
+
+            clearHistory.addEventListener('click', () => {
+                if (confirm('clear all sessions?')) { localStorage.removeItem('tyaza_fluid'); neuralNewSession(); }
+            });
+
+            // responsive resize
+            function handleResize() {
+                document.documentElement.style.setProperty('--safe-bottom', window.innerHeight + 'px');
+                if (window.innerWidth >= 768 && sidebar) {
+                    sidebar.classList.remove('sidebar-visible');
+                    if (sidebarOverlay) sidebarOverlay.classList.remove('visible');
+                }
+            }
+            window.addEventListener('resize', handleResize);
+
+            // voice loading
+            if (synth) {
+                loadVoices();
+                synth.onvoiceschanged = loadVoices;
+            }
+
+            // startup
             window.onload = () => {
-                loadHistoryList();
-                startNewChat();
-                
-                // Pre-load voices
-                if (synth) {
-                    synth.getVoices();
-                }
+                neuralNewSession();
+                renderHistory();
+                handleResize();
             };
         })();
     </script>
