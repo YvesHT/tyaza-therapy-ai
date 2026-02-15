@@ -1,0 +1,18 @@
+
+---
+
+## ? **Quick Netlify Settings**
+
+After deployment, optimize these settings:
+
+```yaml
+# Site settings:
+Site name: tyaza-therapy (or custom domain)
+Build command: (leave empty)
+Publish directory: /
+
+# Environment variables (if you want to hide key):
+# Not needed - key stays in user's browser!
+
+# Headers (optional):
+Create netlify.toml:
